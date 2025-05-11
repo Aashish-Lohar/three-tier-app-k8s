@@ -44,17 +44,17 @@ spec:
             - name: DATABASE_SERVICE
               valueFrom:
                 secretKeyRef:
-                  name: todos-fastapi-backend-chart-secrets
+                  name: {{ include "fastapi-backend.fullname" . }}-secrets
                   key: DATABASE_SERVICE
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: todos-fastapi-backend-chart-secrets
+                  name: {{ include "fastapi-backend.fullname" . }}-secrets
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: todos-fastapi-backend-chart-secrets
+                  name: {{ include "fastapi-backend.fullname" . }}-secrets
                   key: POSTGRES_USER
           ports:
             - name: http
