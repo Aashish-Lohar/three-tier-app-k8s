@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: todos
+      # POSTGRES_DB: todos
     ports:
       - "5432:5432"
     volumes:
