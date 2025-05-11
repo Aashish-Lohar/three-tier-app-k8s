@@ -1,0 +1,9 @@
+dependencies:
+- name: fastapi-backend-chart
+  repository: file://charts/fastapi-backend-chart
+  version: 0.1.0
+- name: react-frontend-chart
+  repository: file://charts/react-frontend-chart
+  version: 0.1.0
+digest: sha256:468a25bbdb710be074ed2b2db69fdbb1d5811a6cc9fe35ee59a5f1dcdc30ebf7
+generated: "2025-05-11T20:40:19.6189302+05:30"
