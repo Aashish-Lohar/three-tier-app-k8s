@@ -123,7 +123,7 @@ volumeMounts:
 #   readOnly: true
 
 dbSecrets:
-  DATABASE_SERVICE: postgres-postgresql
+  DATABASE_SERVICE: todos-postgresql
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
 nodeSelector: {}
