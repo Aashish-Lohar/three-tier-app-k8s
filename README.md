@@ -4,11 +4,12 @@ A beautiful, modern todo application with a React frontend, FastAPI backend, and
 
 
 # steps to deploy helmchart in kubernetes
-1. helm install todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
-2. helm upgrade todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
-3. kubectl port-forward svc/todos-react-frontend-chart-service 3000:80
-4. kubectl port-forward svc/todos-fastapi-backend-chart-service 30002:8000
-5. Check application on http://localhost:3000/
+1. helm dependency update react-fastapi-todos-chart/
+2. helm install todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
+3. helm upgrade todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
+4. kubectl port-forward svc/todos-react-frontend-chart-service 3000:80
+5. kubectl port-forward svc/todos-fastapi-backend-chart-service 30002:8000
+6. Check application on http://localhost:3000/
 
 ## Features
 
