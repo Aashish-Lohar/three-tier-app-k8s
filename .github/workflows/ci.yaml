@@ -23,3 +23,6 @@ jobs:
 
       - name: Run build
         run: npm run build
+        
+      - name: intentional error
+        run: npm 
