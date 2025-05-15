@@ -1,4 +1,4 @@
-# Taskify - Todo App PR check test
+# Taskify - Todo App PR check test 2
 
 A beautiful, modern todo application with a React frontend, FastAPI backend, and PostgreSQL database.
 
