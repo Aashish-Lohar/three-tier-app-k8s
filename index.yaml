@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  todos:
+  - apiVersion: v2
+    appVersion: 0.1.2
+    created: "2025-07-06T13:45:03.804555538Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.7.4
+    - name: fastapi-backend-chart
+      repository: file://charts/fastapi-backend-chart
+      version: 0.1.0
+    - name: react-frontend-chart
+      repository: file://charts/react-frontend-chart
+      version: 0.1.2
+    description: A Helm chart for Kubernetes
+    digest: 9c881a44b87fff02e19755ffe61387143b5afcea9ab97c1a8ca0769e5874367c
+    name: todos
+    type: application
+    urls:
+    - https://Aashish-Lohar.github.io/three-tier-app-k8s/todos-0.1.2.tgz
+    version: 0.1.2
+generated: "2025-07-06T13:45:03.798017216Z"

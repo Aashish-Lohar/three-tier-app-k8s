@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.7.4
+- name: fastapi-backend-chart
+  repository: file://charts/fastapi-backend-chart
+  version: 0.1.0
+- name: react-frontend-chart
+  repository: file://charts/react-frontend-chart
+  version: 0.1.2
+digest: sha256:19a25a427ff4d70ca4ea27dab7bce5e4e1f936ae77edb9a4638b53291aef0ab5
+generated: "2025-07-06T13:44:58.958327352Z"
