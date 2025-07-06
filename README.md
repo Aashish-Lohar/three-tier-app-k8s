@@ -4,12 +4,56 @@ A beautiful, modern todo application with a React frontend, FastAPI backend, and
 helllo
 
 # steps to deploy helmchart in kubernetes
-1. helm dependency update react-fastapi-todos-chart/
-2. helm install todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
-3. helm upgrade todos ./react-fastapi-todos-chart --set auth.postgresPassword=postgres
-4. kubectl port-forward svc/todos-react-frontend-chart-service 3000:80
-5. kubectl port-forward svc/todos-fastapi-backend-chart-service 30002:8000
-6. Check application on http://localhost:3000/
+1. **Install Istio:**
+   ```bash
+   curl -L https://istio.io/downloadIstio | sh -
+   cd istio-1.26.1
+   export PATH=$PWD/bin:$PATH
+   ```
+
+2. **Install Istio with the demo profile (no gateways):**
+   ```bash
+   istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
+   ```
+
+3. **Enable Istio sidecar injection for the default namespace:**
+   ```bash
+   kubectl label namespace default istio-injection=enabled
+   ```
+
+4. **Install Gateway API CRDs if not already present:**
+   ```bash
+   kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
+   { kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.3.0" | kubectl apply -f -; }
+   ```
+
+5. **Update Helm chart dependencies:**
+   ```bash
+   helm dependency update react-fastapi-todos-chart/
+   ```
+
+6. **Install the Helm chart:**
+   ```bash
+   helm install todos ./react-fastapi-todos-chart
+   ```
+
+7. **(Optional) Upgrade the Helm release if needed:**
+   ```bash
+   helm upgrade todos ./react-fastapi-todos-chart
+   ```
+
+8. **Annotate the Istio gateway service:**
+   ```bash
+   kubectl annotate gateway todos-istio-gateway networking.istio.io/service-type=ClusterIP --namespace=default
+   ```
+
+9. **Port-forward the Istio gateway service:**
+   ```bash
+   kubectl port-forward svc/todos-istio-gateway-istio 8080:80
+   ```
+
+10. **Access the application:**  
+    Open [http://localhost:8080/](http://localhost:8080/) in your browser.
 
 ## Features
 
