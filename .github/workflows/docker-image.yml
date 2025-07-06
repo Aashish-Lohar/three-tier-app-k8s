@@ -27,13 +27,17 @@ jobs:
           docker build -f Dockerfile.frontend -t aashishlohar/todos-frontend:latest .
 
       - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@v0.19.0
+        uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: 'aashishlohar/todos-frontend:latest'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:latest'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
+          output: trivy-result.txt
+
+      - name: Check Trivy result file
+        run: cat trivy-result.txt
 
       - name: Push Docker image
         if: success()
