@@ -42,3 +42,33 @@ jobs:
         if: success()
         run: |
           docker push aashishlohar/todos-frontend:0.1.2
+
+  publish-helm-chart:
+    runs-on: ubuntu-latest
+    needs: build-scan-push
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # - name: Set up Helm
+      #   uses: azure/setup-helm@v4
+      #   with:
+      #     version: v3.14.4
+
+      - name: Package umbrella chart
+        run: |
+          helm package ./react-fastapi-todos-chart
+
+      - name: Create Helm repo index
+        run: |
+          helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./react-fastapi-todos-chart
+          publish_branch: gh-pages
