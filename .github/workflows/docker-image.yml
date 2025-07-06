@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -f Dockerfile.frontend -t aashishlohar/todos-frontend:latest .
+          docker build -f Dockerfile.frontend -t aashishlohar/todos-frontend:0.1.2 .
 
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@0.24.0
@@ -41,4 +41,4 @@ jobs:
       - name: Push Docker image
         if: success()
         run: |
-          docker push aashishlohar/todos-frontend:latest
+          docker push aashishlohar/todos-frontend:0.1.2
