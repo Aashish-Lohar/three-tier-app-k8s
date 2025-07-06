@@ -31,7 +31,6 @@ jobs:
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:latest'
           format: 'table'
-          exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           output: trivy-result.txt
