@@ -27,7 +27,7 @@ jobs:
           docker build -f Dockerfile.frontend -t aashishlohar/todos-frontend:latest .
 
       - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@v0.16.0
+        uses: aquasecurity/trivy-action@v0.19.0
         with:
           image-ref: 'aashishlohar/todos-frontend:latest'
           format: 'table'
