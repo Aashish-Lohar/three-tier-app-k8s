@@ -57,6 +57,9 @@ jobs:
       #   uses: azure/setup-helm@v4
       #   with:
       #     version: v3.14.4
+      - name: Helm Dependencies update
+        run: |
+          helm dependency update ./react-fastapi-todos-chart
 
       - name: Package umbrella chart
         run: |
