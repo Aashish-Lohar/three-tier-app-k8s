@@ -9,4 +9,4 @@ dependencies:
   repository: file://charts/react-frontend-chart
   version: 0.1.2
 digest: sha256:19a25a427ff4d70ca4ea27dab7bce5e4e1f936ae77edb9a4638b53291aef0ab5
-generated: "2025-07-06T13:44:58.958327352Z"
+generated: "2025-07-06T13:51:38.119258084Z"

@@ -3,7 +3,7 @@ entries:
   todos:
   - apiVersion: v2
     appVersion: 0.1.2
-    created: "2025-07-06T13:45:03.804555538Z"
+    created: "2025-07-06T13:51:42.874284812Z"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -16,10 +16,10 @@ entries:
       repository: file://charts/react-frontend-chart
       version: 0.1.2
     description: A Helm chart for Kubernetes
-    digest: 9c881a44b87fff02e19755ffe61387143b5afcea9ab97c1a8ca0769e5874367c
+    digest: 52957c386e738d3846ad13ad9ae90bbf9b21c4d45f52cb8a5aacf24cde7288a9
     name: todos
     type: application
     urls:
-    - https://Aashish-Lohar.github.io/three-tier-app-k8s/todos-0.1.2.tgz
+    - todos-0.1.2.tgz
     version: 0.1.2
-generated: "2025-07-06T13:45:03.798017216Z"
+generated: "2025-07-06T13:51:42.867920622Z"
