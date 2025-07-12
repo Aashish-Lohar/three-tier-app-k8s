@@ -10,6 +10,8 @@ jobs:
   build-push-frontend:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Check if frontend Chart.yaml changed
         id: check_frontend
         run: |
@@ -21,8 +23,6 @@ jobs:
             echo "No changes in frontend Chart.yaml. Skipping job."
             exit 78
           fi
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -63,6 +63,8 @@ jobs:
   build-push-backend:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Check if backend Chart.yaml changed
         id: check_backend
         run: |
@@ -74,8 +76,6 @@ jobs:
             echo "No changes in backend Chart.yaml. Skipping job."
             exit 78
           fi
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
