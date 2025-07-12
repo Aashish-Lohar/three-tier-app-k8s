@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml'
-      - 'react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml'
   workflow_dispatch:
 
 jobs:
