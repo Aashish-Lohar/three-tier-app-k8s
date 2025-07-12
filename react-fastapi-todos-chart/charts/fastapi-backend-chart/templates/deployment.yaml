@@ -72,14 +72,13 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
+          volumeMounts: 
+            - mountPath: "/data/backend"
+              name: fastapi-backend-storage
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: fastapi-backend-storage
+          persistentVolumeClaim:
+            claimName: {{ include "fastapi-backend.fullname" . }}-pvc
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

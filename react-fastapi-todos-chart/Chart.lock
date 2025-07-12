@@ -4,9 +4,9 @@ dependencies:
   version: 16.7.4
 - name: fastapi-backend-chart
   repository: file://charts/fastapi-backend-chart
-  version: 0.1.0
+  version: 0.1.1
 - name: react-frontend-chart
   repository: file://charts/react-frontend-chart
   version: 0.1.2
-digest: sha256:19a25a427ff4d70ca4ea27dab7bce5e4e1f936ae77edb9a4638b53291aef0ab5
-generated: "2025-07-06T13:51:38.119258084Z"
+digest: sha256:e78af7b7b6e10ba71d663748979d344f77258a3f61c9494e7ddecc94652dccde
+generated: "2025-07-12T14:45:22.472601606Z"
