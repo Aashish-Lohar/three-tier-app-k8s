@@ -12,8 +12,18 @@ on:
 jobs:
   build-push-frontend:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml') || contains(github.event.head_commit.added, 'react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml')
     steps:
+      - name: Check if frontend Chart.yaml changed
+        id: check_frontend
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then exit 0; fi
+          git fetch origin ${{ github.event.before }}
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml$'; then
+            echo "Frontend Chart.yaml changed. Proceeding."
+          else
+            echo "No changes in frontend Chart.yaml. Skipping job."
+            exit 78
+          fi
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -55,8 +65,18 @@ jobs:
 
   build-push-backend:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml') || contains(github.event.head_commit.added, 'react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml')
     steps:
+      - name: Check if backend Chart.yaml changed
+        id: check_backend
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then exit 0; fi
+          git fetch origin ${{ github.event.before }}
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml$'; then
+            echo "Backend Chart.yaml changed. Proceeding."
+          else
+            echo "No changes in backend Chart.yaml. Skipping job."
+            exit 78
+          fi
       - name: Checkout code
         uses: actions/checkout@v3
 
