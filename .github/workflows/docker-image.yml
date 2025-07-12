@@ -41,12 +41,12 @@ jobs:
 
       - name: Build Docker image (frontend)
         run: |
-          docker build -f Dockerfile.frontend -t aashishlohar/todos-frontend:${{ steps.frontend_version.outputs.version }} .
+          docker build -f Dockerfile.frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }} .
 
       - name: Scan Docker image with Trivy (frontend)
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: 'aashishlohar/todos-frontend:${{ steps.frontend_version.outputs.version }}'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }}'
           format: 'table'
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -58,7 +58,7 @@ jobs:
       - name: Push Docker image (frontend)
         if: success()
         run: |
-          docker push aashishlohar/todos-frontend:${{ steps.frontend_version.outputs.version }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }}
 
   build-push-backend:
     runs-on: ubuntu-latest
@@ -94,12 +94,12 @@ jobs:
 
       - name: Build Docker image (backend)
         run: |
-          docker build -f Dockerfile.backend -t aashishlohar/todos-backend:${{ steps.backend_version.outputs.version }} .
+          docker build -f Dockerfile.backend -t ${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }} .
 
       - name: Scan Docker image with Trivy (backend)
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: 'aashishlohar/todos-backend:${{ steps.backend_version.outputs.version }}'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }}'
           format: 'table'
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -111,7 +111,7 @@ jobs:
       - name: Push Docker image (backend)
         if: success()
         run: |
-          docker push aashishlohar/todos-backend:${{ steps.backend_version.outputs.version }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }}
 
   publish-helm-chart:
     runs-on: ubuntu-latest
