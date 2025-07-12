@@ -36,7 +36,7 @@ jobs:
       - name: Extract frontend appVersion
         id: frontend_version
         run: |
-          FRONTEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml | awk '{print $2}')
+          FRONTEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml | awk '{print $2}' | tr -d '"')
           echo "version=$FRONTEND_VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Docker image (frontend)
@@ -89,7 +89,7 @@ jobs:
       - name: Extract backend appVersion
         id: backend_version
         run: |
-          BACKEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml | awk '{print $2}')
+          BACKEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml | awk '{print $2}' | tr -d '"')
           echo "version=$BACKEND_VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Docker image (backend)
