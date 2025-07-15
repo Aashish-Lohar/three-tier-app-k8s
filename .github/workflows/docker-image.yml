@@ -1,0 +1,147 @@
+name: Build, Scan, and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-push-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Check if frontend Chart.yaml changed
+        id: check_frontend
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then exit 0; fi
+          git fetch origin ${{ github.event.before }}
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml$'; then
+            echo "Frontend Chart.yaml changed. Proceeding."
+          else
+            echo "No changes in frontend Chart.yaml. Skipping job."
+            exit 78
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract frontend appVersion
+        id: frontend_version
+        run: |
+          FRONTEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/react-frontend-chart/Chart.yaml | awk '{print $2}' | tr -d '"')
+          echo "version=$FRONTEND_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image (frontend)
+        run: |
+          docker build -f Dockerfile.frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }} .
+
+      - name: Scan Docker image with Trivy (frontend)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }}'
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: trivy-result-frontend.txt
+
+      - name: Check Trivy result file (frontend)
+        run: cat trivy-result-frontend.txt
+
+      - name: Push Docker image (frontend)
+        if: success()
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/todos-frontend:${{ steps.frontend_version.outputs.version }}
+
+  build-push-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Check if backend Chart.yaml changed
+        id: check_backend
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then exit 0; fi
+          git fetch origin ${{ github.event.before }}
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml$'; then
+            echo "Backend Chart.yaml changed. Proceeding."
+          else
+            echo "No changes in backend Chart.yaml. Skipping job."
+            exit 78
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract backend appVersion
+        id: backend_version
+        run: |
+          BACKEND_VERSION=$(grep '^appVersion:' react-fastapi-todos-chart/charts/fastapi-backend-chart/Chart.yaml | awk '{print $2}' | tr -d '"')
+          echo "version=$BACKEND_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image (backend)
+        run: |
+          docker build -f Dockerfile.backend -t ${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }} .
+
+      - name: Scan Docker image with Trivy (backend)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }}'
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: trivy-result-backend.txt
+
+      - name: Check Trivy result file (backend)
+        run: cat trivy-result-backend.txt
+
+      - name: Push Docker image (backend)
+        if: success()
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/todos-backend:${{ steps.backend_version.outputs.version }}
+
+  publish-helm-chart:
+    runs-on: ubuntu-latest
+    needs: [build-push-frontend, build-push-backend]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # - name: Set up Helm
+      #   uses: azure/setup-helm@v4
+      #   with:
+      #     version: v3.14.4
+      - name: Helm Dependencies update
+        run: |
+          helm dependency update ./react-fastapi-todos-chart
+
+      - name: Package umbrella chart
+        run: |
+          helm package ./react-fastapi-todos-chart
+
+      - name: Create Helm repo index
+        run: |
+          helm repo index . 
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
