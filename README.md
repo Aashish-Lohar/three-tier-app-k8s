@@ -44,7 +44,7 @@ helllo
 
 8. **Annotate the Istio gateway service:**
    ```bash
-   kubectl annotate gateway todos-istio-gateway networking.istio.io/service-type=ClusterIP --namespace=default
+   kubectl annotate gateway todos-gateway networking.istio.io/service-type=ClusterIP --namespace=default
    ```
 
 9. **Port-forward the Istio gateway service:**
